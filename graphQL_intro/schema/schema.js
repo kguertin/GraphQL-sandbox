@@ -12,7 +12,7 @@ const CompanyType = new GraphQLObjectType({
   },
 });
 
-// User Type vs User Model -  Thats why we can make a field of company
+// User Type vs User Model -  Thats why we can make a field of company and find the user by companyId
 const UserType = new GraphQLObjectType({
   name: 'User',
   fields: {
@@ -41,6 +41,17 @@ const RootQuery = new GraphQLObjectType({
       resolve(parentValue, args) {
         return axios
           .get(`http://localhost:3000/users/${args.id}`)
+          .then((res) => res.data);
+      },
+    },
+    company: {
+      type: CompanyType,
+      args: {
+        id: { type: GraphQLString },
+      },
+      resolve(parentValue, args) {
+        return axios
+          .get(`http://localhost:3000/companies/${args.id}`)
           .then((res) => res.data);
       },
     },
